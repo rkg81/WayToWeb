@@ -1,0 +1,196 @@
++----------------+
+|   signup.html  |
+| (Create user or admin account) |
++--------+-------+
+         |
+         v
++----------------+
+|   login.html   |
+| (User/Admin Login) |
++--------+-------+
+         |
+         v
++-----------------------------+
+| Check role from localStorage|
++-------------+---------------+
+              |
+    +---------+---------+
+    |                   |
+    v                   v
++-----------+       +------------+
+| index.html|       | admin.html |
+| (User Home)       | (Admin Panel) |
++-----+-----+       +------+-----+
+      |                     |
+      |                     |
+  [User Actions]         [Admin Actions]
+  - Report Found Item    - See pending claims
+  - Search Items         - Approve/Reject claims
+  - Claim Items          - Logout
+  - Logout
+
+
+
+
+step-by-step and page-by-page just like a real user would experience it:
+
+🏠 Starting Point: Open the App (index.html)
+If no one is logged in yet:
+
+User will be redirected immediately to login.html (because of your page protection ✅).
+
+🔑 Step 1: Signup (signup.html)
+User/admin clicks "Sign Up" link.
+
+Fills in:
+
+Email
+
+Password + Confirm Password
+
+Selects role: User or Admin
+
+Presses "Sign Up"
+
+If passwords don't match → error toast
+
+If email already registered → error toast
+
+If successful → success toast and redirect to login.html
+
+Data is saved into localStorage under the key users.
+
+🔑 Step 2: Login (login.html)
+Enter email and password.
+
+If matched:
+
+If role = user → Redirect to index.html
+
+If role = admin → Redirect to admin.html
+
+Logged-in user's data is saved under loggedInUser in localStorage.
+
+🏠 Step 3A: User Dashboard (index.html)
+User can now:
+Report Found Item
+
+Enter:
+
+Item Name
+
+Description
+
+Color
+
+Found Location
+
+Upload Photo (with instant preview 📸)
+
+Click "Report"
+
+New item is saved into localStorage under lostItems.
+
+A 16-digit unique ID is generated automatically.
+
+A success toast confirms submission!
+
+Search for Found Items
+
+Search by Item Name.
+
+Results displayed nicely:
+
+Name
+
+Description
+
+Color
+
+Location
+
+Reported on (beautiful formatted date)
+
+Photo if available
+
+Each result has a "Claim" button.
+
+Claim an Item
+
+Click "Claim" on an item.
+
+Sends a claim request:
+
+User email
+
+Item ID
+
+Claim timestamp
+
+Status: pending
+
+Saved in localStorage under claims.
+
+🛡 Step 3B: Admin Dashboard (admin.html)
+Admin can now:
+See All Pending Claims
+
+Shows:
+
+Item Name
+
+Claimed by (email)
+
+Claimed on (pretty formatted date)
+
+Each claim shows "Approve" and "Reject" buttons.
+
+Approve a Claim
+
+Changes claim status to approved.
+
+Marks the item as claimed: true and records claimedBy (user email).
+
+Reject a Claim
+
+Removes the claim request completely.
+
+Logout
+
+Clears loggedInUser and redirects back to login.html.
+
+📦 Data Storage Structure (Inside Browser's localStorage):
+Key	What It Stores
+users	Array of users (email, password, role)
+loggedInUser	Currently logged-in user's info
+lostItems	Array of reported items (with name, description, color, location, photo, time, ID, claimed status)
+claims	Array of claim requests (itemId, userEmail, claimDateTime, status)
+📱 PWA Features:
+✅ Install prompt shows nicely (only once).
+✅ App can be installed on desktop, Android, iOS.
+✅ Offline support via Service Worker.
+✅ Smart caching of key files.
+
+
+✨ Overall User Flow Diagram:
+
+signup.html --> login.html --> (role check)
+                               ↙         ↘
+                         index.html     admin.html
+                     (user dashboard)  (admin panel)
+
+index.html
+- report item
+- search items
+- claim item
+
+admin.html
+- approve/reject claims
+- manage items
+
+
+🎯 Quick Experience Summary:
+Who	Action
+New User	Sign up, login, report lost items, search, claim
+Admin	Login, view claims, approve or reject, manage lost/found
+All Users	Install PWA on desktop/mobile, works offline

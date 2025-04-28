@@ -1,0 +1,33 @@
+<!-- for creating accounts -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Signup - Lost and Found</title>
+  <link rel="stylesheet" href="style.css">
+
+</head>
+<body>
+  <h2>Create Account</h2>
+
+  <form id="signupForm">
+    <input type="email" id="email" placeholder="Email" required><br>
+    <input type="password" id="password" placeholder="Password" required><br>
+    <input type="password" id="confirmPassword" placeholder="Confirm Password" required><br>
+
+    <label>Select Role:</label><br>
+    <input type="radio" name="role" value="user" checked> User<br>
+    <input type="radio" name="role" value="admin"> Admin<br>
+
+    <button type="submit">Sign Up</button>
+  </form>
+
+  <p>Already have an account? <a href="login.html">Login here</a></p>
+
+  <script src="signup.js"></script>
+  <div id="toast" class="toast"></div>
+
+</body>
+</html>

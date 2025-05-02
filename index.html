@@ -6,12 +6,11 @@
   <title>Lost and Found</title>
   <link rel="stylesheet" href="style.css" />
 
-  <!-- ✅ Firebase SDKs -->
+  <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js"></script>
 
-  <!-- ✅ Firebase Config (Replace with real values) -->
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyAC45Q9vgk_GexkWQf_2pxOiTrlMIdxwE4",
@@ -28,11 +27,8 @@
   <div class="container">
     <h1>Lost and Found</h1>
     <p id="user-profile" style="text-align:center; font-weight:bold;"></p>
-
-    <!-- ✅ Logout Button -->
     <button onclick="logout()" style="float: right;">Logout</button>
 
-    <!-- ✅ Report Found Item -->
     <section id="report-section" style="display: none;">
       <h2>Report Found Item</h2>
       <form id="reportForm">
@@ -46,7 +42,6 @@
       </form>
     </section>
 
-    <!-- ✅ Search Section -->
     <section id="search-section" style="display: none;">
       <h2>Search Found Items</h2>
       <input type="text" id="search-query" placeholder="Search by name" />
@@ -55,10 +50,7 @@
     </section>
   </div>
 
-  <!-- ✅ Toast Notification Container -->
   <div id="toast" class="toast"></div>
-
-  <!-- ✅ Load main JS logic -->
   <script src="index.js"></script>
 </body>
 </html>

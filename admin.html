@@ -1,19 +1,15 @@
-<!-- Admin Dashboard UI -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Admin Panel - Lost and Found</title>
-
   <link rel="stylesheet" href="style.css" />
 
-  <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js"></script>
 
-  <!-- Firebase Config (Replace with real values) -->
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyAC45Q9vgk_GexkWQf_2pxOiTrlMIdxwE4",
@@ -30,17 +26,12 @@
   <div class="container">
     <h2>Admin Panel - Manage Claims</h2>
     <p id="admin-profile" style="text-align:center; font-weight:bold;"></p>
-
     <button onclick="logout()">Logout</button>
-
     <h3>Pending Claim Requests</h3>
     <ul id="claims-list"></ul>
   </div>
 
-  <!-- Toast Notification -->
   <div id="toast" class="toast"></div>
-
-  <!-- Admin Logic -->
   <script src="admin.js"></script>
 </body>
 </html>

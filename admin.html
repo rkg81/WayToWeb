@@ -2,19 +2,20 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin Panel - Lost and Found</title>
   <link rel="stylesheet" href="style.css" />
 
-  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js"></script>
+  <!-- Firebase Compat SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
+
+  <!-- Firebase Config -->
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyAC45Q9vgk_GexkWQf_2pxOiTrlMIdxwE4",
       authDomain: "lostandfoundapp-b2102.firebaseapp.com",
-      projectId: "lostandfoundapp-b2102",
-      storageBucket: "lostandfoundapp-b2102.firebasestorage.app",
       messagingSenderId: "895575975017",
       appId: "1:895575975017:web:a938ad16165c3d1a8beef8"
     };
@@ -22,15 +23,18 @@
   </script>
 </head>
 <body>
-  <div class="container">
-    <h2>Admin Panel - Manage Claims</h2>
-    <p id="admin-profile" style="text-align:center; font-weight:bold;"></p>
-    <button onclick="logout()">Logout</button>
-    <h3>Pending Claim Requests</h3>
-    <ul id="claims-list"></ul>
-  </div>
+  <h2>Admin Panel - Manage Claims</h2>
+  <p id="admin-profile" style="text-align:center; font-weight:bold;"></p>
 
-  <div id="toast" class="toast"></div>
+  <button onclick="logout()">Logout</button>
+
+  <h3>Pending Claim Requests</h3>
+  <ul id="claims-list"></ul>
+
+  <h3>All Reported Items</h3>
+  <ul id="items-list"></ul>
+
   <script src="admin.js"></script>
+  <div id="toast" class="toast"></div>
 </body>
 </html>

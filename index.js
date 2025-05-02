@@ -1,6 +1,20 @@
-// Firebase setup
-const authIndex = firebase.auth();
-const dbIndex = firebase.firestore();
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+// Handle authentication state
+auth.onAuthStateChanged(user => {
+  if (!user) {
+    window.location.href = 'login.html';
+  } else {
+    db.collection('users').doc(user.uid).get().then(doc => {
+      if (doc.exists) {
+        document.getElementById('user-profile').textContent = `Logged in as: ${doc.data().email}`;
+        document.getElementById('report-section').style.display = 'block';
+        document.getElementById('search-section').style.display = 'block';
+      }
+    });
+  }
+});
 
 // Show toast message
 function showToast(message, duration = 3000) {
@@ -16,28 +30,13 @@ function showToast(message, duration = 3000) {
 
 // Logout function
 function logout() {
-  authIndex.signOut().then(() => {
+  auth.signOut().then(() => {
     showToast("Logged out successfully!");
     setTimeout(() => window.location.href = 'login.html', 1500);
   }).catch(error => {
     showToast("Logout failed: " + error.message);
   });
 }
-
-// Handle authentication state
-authIndex.onAuthStateChanged(user => {
-  if (!user) {
-    window.location.href = 'login.html';
-  } else {
-    dbIndex.collection('users').doc(user.uid).get().then(doc => {
-      if (doc.exists) {
-        document.getElementById('report-section').style.display = 'block';
-        document.getElementById('search-section').style.display = 'block';
-        document.getElementById('user-profile').textContent = `Logged in as: ${doc.data().email}`;
-      }
-    });
-  }
-});
 
 // Report item
 function reportItem() {
@@ -67,7 +66,7 @@ function reportItem() {
 
 // Save item to Firestore
 function saveItemToFirestore(name, description, color, location, dateTime, photo) {
-  dbIndex.collection('lostItems').add({
+  db.collection('lostItems').add({
     name, description, color, location, dateTime, photo,
     claimed: false,
     claimedBy: null
@@ -80,10 +79,10 @@ function saveItemToFirestore(name, description, color, location, dateTime, photo
 
 // Claim item
 function claimItem(itemId) {
-  const user = authIndex.currentUser;
+  const user = auth.currentUser;
   if (!user) return;
 
-  dbIndex.collection('claims').add({
+  db.collection('claims').add({
     itemId: itemId,
     userEmail: user.email,
     claimDateTime: new Date().toISOString(),
@@ -93,7 +92,7 @@ function claimItem(itemId) {
   });
 }
 
-// Preview photo function
+// Preview photo
 function previewPhoto() {
   const fileInput = document.getElementById('item-photo');
   const preview = document.getElementById('photo-preview');
@@ -114,7 +113,7 @@ function searchItems() {
   const resultsList = document.getElementById('search-results');
   resultsList.innerHTML = '';
 
-  dbIndex.collection('lostItems').get().then(snapshot => {
+  db.collection('lostItems').get().then(snapshot => {
     snapshot.forEach(doc => {
       const item = doc.data();
       if (item.name.toLowerCase().includes(query)) {
@@ -131,4 +130,9 @@ function searchItems() {
       showToast("No matching items found");
     }
   });
+}
+
+// ✅ Register service worker for PWA support
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/service-worker.js');
 }

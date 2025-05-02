@@ -3,19 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Lost and Found</title>
+  <title>User Dashboard - Lost and Found</title>
   <link rel="stylesheet" href="style.css" />
+  <link rel="manifest" href="manifest.json" />
 
-  <!-- Firebase CDN -->
-  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js"></script>
+
+  <!-- Firebase Compat SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
+
+  <!-- Firebase Config -->
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyAC45Q9vgk_GexkWQf_2pxOiTrlMIdxwE4",
       authDomain: "lostandfoundapp-b2102.firebaseapp.com",
-      projectId: "lostandfoundapp-b2102",
-      storageBucket: "lostandfoundapp-b2102.firebasestorage.app",
+      // projectId: "lostandfoundapp-b2102",
+      // storageBucket: "lostandfoundapp-b2102.firebasestorage.app",
       messagingSenderId: "895575975017",
       appId: "1:895575975017:web:a938ad16165c3d1a8beef8"
     };
@@ -24,11 +28,12 @@
 </head>
 <body>
   <div class="container">
-    <h1>Lost and Found</h1>
-    <p id="user-profile" style="text-align:center; font-weight:bold;"></p>
-    <button onclick="logout()" style="float: right;">Logout</button>
+    <h1>Welcome to Lost and Found</h1>
+    <p id="user-profile" style="font-weight: bold;"></p>
+    <button onclick="logout()" style="float:right;">Logout</button>
 
-    <section id="report-section" style="display: none;">
+    <!-- Report Section -->
+    <section id="report-section" style="display:none;">
       <h2>Report Found Item</h2>
       <form id="reportForm">
         <input type="text" id="item-name" placeholder="Item Name" required /><br />
@@ -36,20 +41,21 @@
         <input type="text" id="item-color" placeholder="Color" required /><br />
         <input type="text" id="item-location" placeholder="Found Location" required /><br />
         <input type="file" id="item-photo" accept="image/*" onchange="previewPhoto()" /><br />
-        <img id="photo-preview" style="display:none; margin-top: 10px; width: 200px;" /><br /><br />
+        <img id="photo-preview" style="display:none; width: 200px;" /><br />
         <button type="button" onclick="reportItem()">Report</button>
       </form>
     </section>
 
-    <section id="search-section" style="display: none;">
-      <h2>Search Found Items</h2>
+    <!-- Search Section -->
+    <section id="search-section" style="display:none;">
+      <h2>Search Lost Items</h2>
       <input type="text" id="search-query" placeholder="Search by name" />
-      <button type="button" onclick="searchItems()">Search</button>
+      <button onclick="searchItems()">Search</button>
       <ul id="search-results"></ul>
     </section>
   </div>
 
-  <div id="toast" class="toast"></div>
   <script src="index.js"></script>
+  <div id="toast" class="toast"></div>
 </body>
 </html>

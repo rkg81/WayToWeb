@@ -14,17 +14,18 @@ const urlsToCache = [
   '/manifest.json',
   '/icon-192.png',
   '/icon-512.png'
+  // Optional: '/offline.html'
 ];
 
 // Install event – cache all static assets
 self.addEventListener('install', event => {
+  self.skipWaiting();
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => cache.addAll(urlsToCache))
+    caches.open(CACHE_NAME).then(cache => cache.addAll(urlsToCache))
   );
 });
 
-// Activate event – clean old caches (optional)
+// Activate event – clean old caches
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(cacheNames => {
@@ -39,16 +40,28 @@ self.addEventListener('activate', event => {
   );
 });
 
-// Fetch event – respond from cache or network
+// Fetch event – handle CDN + app shell
 self.addEventListener('fetch', event => {
-  event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        return response || fetch(event.request)
-          .catch(() => {
-            // You could return a fallback HTML page here
-            // return caches.match('/offline.html');
+  const url = event.request.url;
+
+  if (url.startsWith('https://www.gstatic.com')) {
+    event.respondWith(
+      caches.match(event.request).then(cached => {
+        return cached || fetch(event.request).then(response => {
+          return caches.open(CACHE_NAME).then(cache => {
+            cache.put(event.request, response.clone());
+            return response;
           });
+        });
       })
-  );
+    );
+  } else {
+    event.respondWith(
+      caches.match(event.request).then(response => {
+        return response || fetch(event.request)
+          // Optional fallback
+          // .catch(() => caches.match('/offline.html'))
+      })
+    );
+  }
 });

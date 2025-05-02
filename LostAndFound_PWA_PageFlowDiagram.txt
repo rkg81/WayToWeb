@@ -1,10 +1,16 @@
 some passwords
 admin code: Rocky
 1. email: abc4774104@gmail.com (admin role)
-password: 123456789
+password: 123456789$%$#sdfDD
 
 2. email: bcs@email.latech.edu (user)
 password: RkdffRd$#%ladk
+
+3. email: qwe@latech.edu
+password: $#$%lkdkDDREk
+
+4. rock@latech.edu
+password: Khjk#$^kdkj8
 
 
 

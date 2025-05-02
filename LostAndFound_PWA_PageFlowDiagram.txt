@@ -4,7 +4,7 @@ admin code: Rocky
 password: 123456789
 
 2. email: bcs@email.latech.edu (user)
-password: 456789
+password: RkdffRd$#%ladk
 
 
 

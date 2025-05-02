@@ -6,11 +6,10 @@
   <title>Lost and Found</title>
   <link rel="stylesheet" href="style.css" />
 
-  <!-- Firebase SDKs -->
+  <!-- Firebase CDN -->
   <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js"></script>
-
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyAC45Q9vgk_GexkWQf_2pxOiTrlMIdxwE4",
@@ -37,7 +36,7 @@
         <input type="text" id="item-color" placeholder="Color" required /><br />
         <input type="text" id="item-location" placeholder="Found Location" required /><br />
         <input type="file" id="item-photo" accept="image/*" onchange="previewPhoto()" /><br />
-        <img id="photo-preview" style="display:none; margin-top: 10px; width: 200px; height: auto; border-radius: 5px;" /><br /><br />
+        <img id="photo-preview" style="display:none; margin-top: 10px; width: 200px;" /><br /><br />
         <button type="button" onclick="reportItem()">Report</button>
       </form>
     </section>

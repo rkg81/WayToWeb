@@ -1,0 +1,5 @@
+# Prevent npm-related files from being committed
+node_modules/
+package.json
+package-lock.json
+.env

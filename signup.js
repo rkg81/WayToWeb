@@ -1,6 +1,18 @@
-<!-- ✅ signup.js -->
+// ✅ signup.js
 const authSignup = firebase.auth();
 const dbSignup = firebase.firestore();
+
+// Show toast
+function showToast(message, duration = 3000) {
+  const toast = document.getElementById('toast');
+  toast.textContent = message;
+  toast.style.display = 'block';
+  toast.style.opacity = '1';
+  setTimeout(() => {
+    toast.style.opacity = '0';
+    setTimeout(() => { toast.style.display = 'none'; }, 500);
+  }, duration);
+}
 
 document.getElementById('signupForm').addEventListener('submit', function(event) {
   event.preventDefault();
@@ -12,8 +24,13 @@ document.getElementById('signupForm').addEventListener('submit', function(event)
 
   const role = (adminCode === 'Rocky') ? 'admin' : 'user';
 
+  if (!email || !password || !confirmPassword) {
+    showToast('All fields are required!');
+    return;
+  }
+
   if (password !== confirmPassword) {
-    alert('Passwords do not match!');
+    showToast('Passwords do not match!');
     return;
   }
 
@@ -26,10 +43,12 @@ document.getElementById('signupForm').addEventListener('submit', function(event)
       });
     })
     .then(() => {
-      alert('Signup successful! Please login.');
-      window.location.href = 'login.html';
+      showToast('Signup successful! Redirecting to login...');
+      setTimeout(() => {
+        window.location.href = 'login.html';
+      }, 2000);
     })
     .catch(error => {
-      alert(error.message);
+      showToast('Signup failed: ' + error.message);
     });
 });

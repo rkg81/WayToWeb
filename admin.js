@@ -2,6 +2,19 @@
 const authAdmin = firebase.auth();
 const dbAdmin = firebase.firestore();
 
+// Show toast notification
+function showToast(message, duration = 3000) {
+  const toast = document.getElementById('toast');
+  toast.textContent = message;
+  toast.style.display = 'block';
+  toast.style.opacity = '1';
+  setTimeout(() => {
+    toast.style.opacity = '0';
+    setTimeout(() => { toast.style.display = 'none'; }, 500);
+  }, duration);
+}
+
+// Auth check
 authAdmin.onAuthStateChanged(user => {
   if (!user) {
     window.location.href = 'login.html';
@@ -17,6 +30,7 @@ authAdmin.onAuthStateChanged(user => {
   }
 });
 
+// Load pending claims
 function loadClaims() {
   const claimsList = document.getElementById('claims-list');
   claimsList.innerHTML = '';
@@ -44,30 +58,43 @@ function loadClaims() {
             claimsList.appendChild(li);
           });
       });
+    })
+    .catch(error => {
+      showToast("Error loading claims: " + error.message);
     });
 }
 
+// Approve claim
 function approveClaim(claimId, itemId, userEmail) {
   dbAdmin.collection('claims').doc(claimId).update({ status: 'approved' });
   dbAdmin.collection('lostItems').doc(itemId).update({ claimed: true, claimedBy: userEmail });
-  alert('Claim approved successfully!');
+  showToast('Claim approved successfully!');
   loadClaims();
 }
 
+// Reject claim
 function rejectClaim(claimId) {
   dbAdmin.collection('claims').doc(claimId).delete()
     .then(() => {
-      alert('Claim rejected.');
+      showToast('Claim rejected.');
       loadClaims();
+    })
+    .catch(error => {
+      showToast("Error rejecting claim: " + error.message);
     });
 }
 
+// Logout
 function logout() {
   authAdmin.signOut().then(() => {
-    window.location.href = 'login.html';
+    showToast("Logged out successfully!");
+    setTimeout(() => window.location.href = 'login.html', 1500);
+  }).catch(error => {
+    showToast("Logout failed: " + error.message);
   });
 }
 
+// Format ISO date to readable
 function formatDate(isoString) {
   const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit', hour12: true };
   return new Date(isoString).toLocaleString('en-US', options);

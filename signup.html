@@ -1,55 +1,48 @@
-<!-- for creating accounts -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  
-
-
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Signup - Lost and Found</title>
-  <link rel="stylesheet" href="style.css">
-  <!-- Firebase Core SDK -->
-  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js"></script>
-  <!-- Firebase Auth -->
-  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js"></script>
-  <!-- Firebase Firestore -->
-  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js"></script>
-  <!-- Firebase Config & Initialization -->
-  <script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyAC45Q9vgk_GexkWQf_2pxOiTrlMIdxwE4",
-    authDomain: "lostandfoundapp-b2102.firebaseapp.com",
-    projectId: "lostandfoundapp-b2102",
-    storageBucket: "lostandfoundapp-b2102.firebasestorage.app",
-    messagingSenderId: "895575975017",
-    appId: "1:895575975017:web:a938ad16165c3d1a8beef8"
-  };
-  // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);
-  </script>
+  <link rel="stylesheet" href="style.css" />
 
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js"></script>
+
+  <!-- Firebase Config -->
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyAC45Q9vgk_GexkWQf_2pxOiTrlMIdxwE4",
+      authDomain: "lostandfoundapp-b2102.firebaseapp.com",
+      projectId: "lostandfoundapp-b2102",
+      storageBucket: "lostandfoundapp-b2102.firebasestorage.app",
+      messagingSenderId: "895575975017",
+      appId: "1:895575975017:web:a938ad16165c3d1a8beef8"
+    };
+    firebase.initializeApp(firebaseConfig);
+  </script>
 </head>
 <body>
-  <h2>Create Account</h2>
+  <div class="container">
+    <h2>Create Account</h2>
 
-  <form id="signupForm">
-    <input type="email" id="email" placeholder="Email" required><br>
-    <input type="password" id="password" placeholder="Password" required><br>
-    <input type="password" id="confirmPassword" placeholder="Confirm Password" required><br>
-    <input type="text" id="adminCode" placeholder="Admin Access Code"><br>
+    <form id="signupForm">
+      <input type="email" id="email" placeholder="Email" required /><br />
+      <input type="password" id="password" placeholder="Password" required /><br />
+      <input type="password" id="confirmPassword" placeholder="Confirm Password" required /><br />
+      <input type="text" id="adminCode" placeholder="Admin Access Code (optional)" /><br />
+      <button type="submit">Sign Up</button>
+    </form>
 
-    <!-- Hidden default role -->
-    <input type="hidden" id="role" value="user">
+    <p>Already have an account? <a href="login.html">Login here</a></p>
+  </div>
 
-    <button type="submit">Sign Up</button>
-  </form>
-
-  <p>Already have an account? <a href="login.html">Login here</a></p>
-
-  <script src="signup.js"></script>
+  <!-- Toast Notification -->
   <div id="toast" class="toast"></div>
 
+  <!-- JS Logic -->
+  <script src="signup.js"></script>
 </body>
 </html>

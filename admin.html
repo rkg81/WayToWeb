@@ -3,6 +3,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <!-- Firebase Core SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js"></script>
+  <!-- Firebase Auth -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js"></script>
+  <!-- Firebase Firestore -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js"></script>
+  <!-- Firebase Config & Initialization -->
+  <script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyAC45Q9vgk_GexkWQf_2pxOiTrlMIdxwE4",
+    authDomain: "lostandfoundapp-b2102.firebaseapp.com",
+    projectId: "lostandfoundapp-b2102",
+    storageBucket: "lostandfoundapp-b2102.firebasestorage.app",
+    messagingSenderId: "895575975017",
+    appId: "1:895575975017:web:a938ad16165c3d1a8beef8"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  </script>
+
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Admin Panel - Lost and Found</title>

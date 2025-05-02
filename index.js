@@ -168,4 +168,10 @@ function formatDate(isoString) {
     const date = new Date(isoString);
     return date.toLocaleString('en-US', options);
   }
+
+  function logout() {
+    localStorage.removeItem("loggedInUser");
+    window.location.href = "login.html";
+  }
+  
   

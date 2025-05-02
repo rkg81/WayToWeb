@@ -8,7 +8,10 @@ document.getElementById('signupForm').addEventListener('submit', function(event)
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value;
     const confirmPassword = document.getElementById('confirmPassword').value;
-    const role = document.querySelector('input[name="role"]:checked').value;
+    const adminCode = document.getElementById("adminCode").value.trim();
+    // Secret code logic
+    const role = (adminCode === "Rocky") ? "admin" : "user";
+
   
     if (password !== confirmPassword) {
       alert('Passwords do not match!');

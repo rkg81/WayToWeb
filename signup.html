@@ -16,10 +16,10 @@
     <input type="email" id="email" placeholder="Email" required><br>
     <input type="password" id="password" placeholder="Password" required><br>
     <input type="password" id="confirmPassword" placeholder="Confirm Password" required><br>
+    <input type="text" id="adminCode" placeholder="(Optional) Admin Access Code"><br>
 
-    <label>Select Role:</label><br>
-    <input type="radio" name="role" value="user" checked> User<br>
-    <input type="radio" name="role" value="admin"> Admin<br>
+    <!-- Hidden default role -->
+    <input type="hidden" id="role" value="user">
 
     <button type="submit">Sign Up</button>
   </form>

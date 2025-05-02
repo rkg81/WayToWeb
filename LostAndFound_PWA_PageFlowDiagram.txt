@@ -1,3 +1,8 @@
+[User's Camera] ---> [PWA Frontend] ---> [YOLO Server API] ---> [Detection Result] ---> [Fill Form in PWA]
+
+
+
+
 +----------------+
 |   signup.html  |
 | (Create user or admin account) |
@@ -194,3 +199,5 @@ Who	Action
 New User	Sign up, login, report lost items, search, claim
 Admin	Login, view claims, approve or reject, manage lost/found
 All Users	Install PWA on desktop/mobile, works offline
+
+

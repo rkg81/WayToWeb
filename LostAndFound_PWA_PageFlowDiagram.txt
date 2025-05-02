@@ -1,3 +1,14 @@
+some passwords
+admin code: Rocky
+1. email: abc4774104@gmail.com (admin role)
+password: 123456789
+
+2. email: bcs@email.latech.edu (user)
+password: 456789
+
+
+
+
 [User's Camera] ---> [PWA Frontend] ---> [YOLO Server API] ---> [Detection Result] ---> [Fill Form in PWA]
 
 

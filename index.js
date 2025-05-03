@@ -17,17 +17,20 @@ auth.onAuthStateChanged(user => {
   }
 });
 
-// Toast
 function showToast(message, duration = 3000) {
   const toast = document.getElementById('toast');
   toast.textContent = message;
-  toast.style.display = 'block';
+  toast.classList.remove('hidden');
   toast.style.opacity = '1';
+
   setTimeout(() => {
     toast.style.opacity = '0';
-    setTimeout(() => { toast.style.display = 'none'; }, 500);
+    setTimeout(() => {
+      toast.classList.add('hidden');
+    }, 500);
   }, duration);
 }
+
 
 // Logout
 function logout() {
@@ -39,8 +42,37 @@ function logout() {
   });
 }
 
-// Report Item
-function reportItem() {
+async function reportItem() {
+  const photoInput = document.getElementById('item-photo');
+
+  if (!photoInput.files || photoInput.files.length === 0) {
+    showToast('Please upload a photo for detection');
+    return;
+  }
+
+  try {
+    const file = photoInput.files[0];
+
+    // Show preview
+    previewPhoto(file);
+
+    // Skip YOLO if file is too large
+    if (file.size > 3 * 1024 * 1024) {
+      showToast("Image too large for detection. You can fill manually.", 3000);
+      return;
+    }
+
+
+    const compressedBlob = await compressImage(file);
+    sendImageToYOLOServer(compressedBlob);
+
+  } catch (err) {
+    console.error('Compression failed:', err);
+    showToast("Image too large or invalid. Try a smaller one.", 3000);
+  }
+}
+
+function submitFinalReport() {
   const name = document.getElementById('item-name').value.trim();
   const description = document.getElementById('item-description').value.trim();
   const color = document.getElementById('item-color').value.trim();
@@ -51,6 +83,23 @@ function reportItem() {
     showToast('Please fill all fields');
     return;
   }
+
+  const dateTime = new Date().toISOString();
+
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    saveItemToFirestore(name, description, color, location, dateTime, e.target.result);
+  };
+
+  if (photoInput.files.length > 0) {
+    reader.readAsDataURL(photoInput.files[0]);
+  } else {
+    saveItemToFirestore(name, description, color, location, dateTime, '');
+  }
+}
+
+
+
 
   const dateTime = new Date().toISOString();
 
@@ -75,18 +124,25 @@ function reportItem() {
 }
 
 
-function saveItemToFirestore(name, description, color, location, dateTime, photoUrl) {
+function saveItemToFirestore(name, description, color, location, dateTime, photo) {
   db.collection('lostItems').add({
-    name, description, color, location, dateTime,
-    photo: photoUrl,
+    name,
+    description,
+    color,
+    location,
+    dateTime,
+    photo,
     claimed: false,
     claimedBy: null
   }).then(() => {
     showToast('Item reported successfully!');
     document.getElementById('reportForm').reset();
     document.getElementById('photo-preview').style.display = 'none';
+  }).catch(error => {
+    showToast("Error reporting item: " + error.message);
   });
 }
+
 
 
 // Claim Item
@@ -105,19 +161,17 @@ function claimItem(itemId) {
 }
 
 // Preview photo
-function previewPhoto() {
-  const fileInput = document.getElementById('item-photo');
+function previewPhoto(file) {
   const preview = document.getElementById('photo-preview');
 
-  if (fileInput.files && fileInput.files[0]) {
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      preview.src = e.target.result;
-      preview.style.display = 'block';
-    };
-    reader.readAsDataURL(fileInput.files[0]);
-  }
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    preview.src = e.target.result;
+    preview.style.display = 'block';
+  };
+  reader.readAsDataURL(file);
 }
+
 
 // Search Items
 function searchItems() {
@@ -160,3 +214,83 @@ function searchItems() {
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/service-worker.js');
 }
+
+// for compressing the image
+function compressImage(file, maxWidth = 640, maxHeight = 640, quality = 0.7) {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      img.src = e.target.result;
+    };
+
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+
+      let width = img.width;
+      let height = img.height;
+
+      // Maintain aspect ratio
+      if (width > height) {
+        if (width > maxWidth) {
+          height *= maxWidth / width;
+          width = maxWidth;
+        }
+      } else {
+        if (height > maxHeight) {
+          width *= maxHeight / height;
+          height = maxHeight;
+        }
+      }
+
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, width, height);
+
+      canvas.toBlob(
+        (blob) => {
+          if (blob) resolve(blob);
+          else reject(new Error("Image compression failed"));
+        },
+        'image/jpeg',
+        quality
+      );
+    };
+
+    reader.onerror = (error) => reject(error);
+    reader.readAsDataURL(file);
+  });
+}
+
+// // sendImageToYOLOServer(file)
+// function sendImageToYOLOServer(file) {
+//   compressImage(file).then(compressedBlob => {
+//     const formData = new FormData();
+//     formData.append('image', compressedBlob, 'compressed.jpg');
+
+//     fetch('http://<FRIEND-IP>:5000/detect', {
+//       method: 'POST',
+//       body: formData
+//     })
+//     .then(response => response.json())
+//     .then(data => {
+//       if (data.labels && data.labels.length > 0) {
+//         document.getElementById('item-name').value = data.labels[0];
+//       }
+//       if (data.colors && data.colors.length > 0) {
+//         document.getElementById('item-color').value = data.colors[0];
+//       }
+//       showToast("Object detected and form auto-filled!", 3000);
+//     })
+//     .catch(error => {
+//       console.error('Detection failed:', error);
+//       showToast("Detection failed. Please try again.", 3000);
+//     });
+//   }).catch(error => {
+//     console.error('Image compression error:', error);
+//     showToast("Image compression failed.", 3000);
+//   });
+// }
+

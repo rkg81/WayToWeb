@@ -3,8 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin Panel - Lost and Found</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Login - Lost and Found</title>
+
+  <!-- ✅ Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
 
   <!-- Firebase Compat SDKs -->
   <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
@@ -24,19 +26,32 @@
     firebase.initializeApp(firebaseConfig);
   </script>
 </head>
-<body>
-  <h2>Admin Panel - Manage Claims</h2>
-  <p id="admin-profile" style="text-align:center; font-weight:bold;"></p>
 
-  <button onclick="logout()">Logout</button>
+<body class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-100 to-white px-4">
+  <div class="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-md">
+    <h2 class="text-2xl font-bold text-center mb-6 text-blue-700">Lost & Found - Login</h2>
 
-  <h3>Pending Claim Requests</h3>
-  <ul id="claims-list"></ul>
+    <form id="loginForm" class="space-y-4">
+      <input type="email" id="email" placeholder="Email" required
+        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+      
+      <input type="password" id="password" placeholder="Password" required
+        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+      
+      <button type="submit"
+        class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 rounded-lg transition duration-200">
+        Login
+      </button>
+    </form>
 
-  <h3>All Reported Items</h3>
-  <ul id="items-list"></ul>
+    <p class="text-center text-sm mt-4">Don't have an account?
+      <a href="signup.html" class="text-blue-600 hover:underline">Sign up here</a>
+    </p>
+  </div>
 
-  <script src="admin.js"></script>
-  <div id="toast" class="toast"></div>
+  <script src="login.js"></script>
+
+  <!-- Toast -->
+  <div id="toast" class="toast fixed bottom-5 left-1/2 -translate-x-1/2 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-md hidden"></div>
 </body>
 </html>

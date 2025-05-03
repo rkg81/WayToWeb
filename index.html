@@ -3,17 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>User Dashboard - Lost and Found</title>
-  <link rel="stylesheet" href="style.css" />
-  <link rel="manifest" href="manifest.json" />
+  <title>Dashboard - Lost and Found</title>
 
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Firebase Compat SDKs -->
+  <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
 
-  <!-- Firebase Config -->
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyAC45Q9vgk_GexkWQf_2pxOiTrlMIdxwE4",
@@ -25,39 +24,60 @@
     };
     firebase.initializeApp(firebaseConfig);
   </script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-storage-compat.js"></script>
-
 </head>
-<body>
-  <div class="container">
-    <h1>Welcome to Lost and Found</h1>
-    <p id="user-profile" style="font-weight: bold;"></p>
-    <button onclick="logout()" style="float:right;">Logout</button>
+
+<body class="min-h-screen bg-gray-100 p-4">
+  <div class="max-w-3xl mx-auto bg-white shadow-lg rounded-xl p-6 space-y-6">
+
+    <!-- Header -->
+    <div class="flex justify-between items-center">
+      <h2 class="text-xl font-bold text-blue-700">Lost & Found Dashboard</h2>
+      <button onclick="logout()" class="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-lg transition">
+        Logout
+      </button>
+    </div>
+
+    <!-- User -->
+    <p id="user-profile" class="text-center text-sm text-gray-600 mb-4"></p>
 
     <!-- Report Section -->
-    <section id="report-section" style="display:none;">
-      <h2>Report Found Item</h2>
-      <form id="reportForm">
-        <input type="text" id="item-name" placeholder="Item Name" required /><br />
-        <input type="text" id="item-description" placeholder="Description" required /><br />
-        <input type="text" id="item-color" placeholder="Color" required /><br />
-        <input type="text" id="item-location" placeholder="Found Location" required /><br />
-        <input type="file" id="item-photo" accept="image/*" onchange="previewPhoto()" /><br />
-        <img id="photo-preview" style="display:none; width: 200px;" /><br />
-        <button type="button" onclick="reportItem()">Report</button>
+    <section id="report-section" style="display: none;">
+      <h3 class="text-lg font-semibold mb-2">Report Lost Item</h3>
+      <form id="reportForm" class="space-y-4">
+        <input id="item-name" placeholder="Item Name" required class="w-full p-3 border border-gray-300 rounded-lg" />
+        <textarea id="item-description" placeholder="Description" required class="w-full p-3 border border-gray-300 rounded-lg"></textarea>
+        <input id="item-color" placeholder="Color" required class="w-full p-3 border border-gray-300 rounded-lg" />
+        <input id="item-location" placeholder="Where You Lost It" required class="w-full p-3 border border-gray-300 rounded-lg" />
+        <input type="file" id="item-photo" onchange="previewPhoto(this.files[0])" class="w-full p-2 border border-gray-300 rounded-lg" />
+        <img id="photo-preview" style="display:none;" class="mt-2 w-32 h-auto rounded-md" />
+
+        <!-- Dual Buttons -->
+        <div class="flex gap-4">
+          <button type="button" onclick="reportItem()" class="w-1/2 bg-yellow-500 hover:bg-yellow-600 text-white py-2 rounded-lg transition">
+            Detect with YOLO
+          </button>
+          <button type="button" onclick="submitFinalReport()" class="w-1/2 bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg transition">
+            Submit Report
+          </button>
+        </div>
       </form>
     </section>
 
     <!-- Search Section -->
-    <section id="search-section" style="display:none;">
-      <h2>Search Lost Items</h2>
-      <input type="text" id="search-query" placeholder="Search by name" />
-      <button onclick="searchItems()">Search</button>
-      <ul id="search-results"></ul>
+    <section id="search-section" style="display: none;">
+      <h3 class="text-lg font-semibold mt-8 mb-2">Search Reported Items</h3>
+      <input id="search-query" placeholder="Search by item name..." class="w-full p-3 border border-gray-300 rounded-lg mb-3" />
+      <button onclick="searchItems()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-lg transition">
+        Search
+      </button>
+      <ul id="search-results" class="mt-4 space-y-4 text-sm text-gray-700"></ul>
     </section>
   </div>
 
+  <!-- Scripts -->
   <script src="index.js"></script>
-  <div id="toast" class="toast"></div>
+
+  <!-- Toast -->
+  <div id="toast" class="toast fixed bottom-5 left-1/2 -translate-x-1/2 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-md hidden"></div>
 </body>
 </html>

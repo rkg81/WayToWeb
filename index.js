@@ -12,10 +12,15 @@ auth.onAuthStateChanged(user => {
         document.getElementById('user-profile').textContent = `Logged in as: ${doc.data().email}`;
         document.getElementById('report-section').style.display = 'block';
         document.getElementById('search-section').style.display = 'block';
+      } else {
+        showToast("User data not found in Firestore.");
       }
+    }).catch(err => {
+      console.error("Error fetching user data:", err);
     });
   }
 });
+
 
 function showToast(message, duration = 3000) {
   const toast = document.getElementById('toast');

@@ -36,12 +36,17 @@ function loadClaims() {
         const item = itemDoc.data();
         const li = document.createElement('li');
         li.innerHTML = `
-          <strong>Item:</strong> ${item?.name || 'Unknown'}<br>
-          <strong>Claimed by:</strong> ${claim.userEmail}<br>
-          <strong>Claimed on:</strong> ${formatDate(claim.claimDateTime)}<br>
-          <button onclick="approveClaim('${doc.id}', '${claim.itemId}', '${claim.userEmail}')">✅ Approve</button>
-          <button onclick="rejectClaim('${doc.id}')">❌ Reject</button>
-          <hr>
+          <div class="mb-4 p-4 border rounded-lg shadow-sm bg-gray-50">
+            <strong>Item:</strong> ${item?.name || 'Unknown'}<br>
+            <strong>Claimed by:</strong> ${claim.userEmail}<br>
+            <strong>Claimed on:</strong> ${formatDate(claim.claimDateTime)}<br>
+            <div class="mt-2 flex gap-3">
+              <button onclick="approveClaim('${doc.id}', '${claim.itemId}', '${claim.userEmail}')"
+                class="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded-md">✅ Approve</button>
+              <button onclick="rejectClaim('${doc.id}')"
+                class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md">❌ Reject</button>
+            </div>
+          </div>
         `;
         claimsList.appendChild(li);
       });
@@ -50,30 +55,33 @@ function loadClaims() {
 }
 
 // Approve claim — update item + claim record
-function approveClaim(claimId, itemId, userEmail) {
-  // 1. Mark the claim as approved
-  db.collection('claims').doc(claimId).update({ status: 'approved' });
-
-  // 2. Update the item as claimed
-  db.collection('lostItems').doc(itemId).update({
-    claimed: true,
-    claimedBy: userEmail
-  });
-
-  alert('Claim approved successfully!');
-  loadClaims();
-  loadItems(); // Refresh items view so it's hidden to users
+async function approveClaim(claimId, itemId, userEmail) {
+  try {
+    await db.collection('claims').doc(claimId).update({ status: 'approved' });
+    await db.collection('lostItems').doc(itemId).update({
+      claimed: true,
+      claimedBy: userEmail
+    });
+    alert('Claim approved successfully!');
+    loadClaims();
+    loadItems();
+  } catch (error) {
+    alert("Approval failed: " + error.message);
+  }
 }
 
 // Reject claim — just delete the claim
-function rejectClaim(claimId) {
-  db.collection('claims').doc(claimId).delete().then(() => {
+async function rejectClaim(claimId) {
+  try {
+    await db.collection('claims').doc(claimId).delete();
     alert('Claim rejected.');
     loadClaims();
-  });
+  } catch (error) {
+    alert("Rejection failed: " + error.message);
+  }
 }
 
-// Show all reported items in admin view
+// Load all reported items for admin view
 function loadItems() {
   const itemsList = document.getElementById('items-list');
   itemsList.innerHTML = '';
@@ -88,11 +96,15 @@ function loadItems() {
       const item = doc.data();
       const li = document.createElement('li');
       li.innerHTML = `
-        <strong>${item.name}</strong> - ${item.description}<br>
-        Location: ${item.location} | Reported on: ${formatDate(item.dateTime)}<br>
-        Claimed: ${item.claimed ? "✅ Yes (by " + item.claimedBy + ")" : "❌ No"}<br>
-        ${!item.claimed ? `<button onclick="deleteItem('${doc.id}')">🗑️ Delete</button>` : ''}
-        <hr>
+        <div class="mb-4 p-4 border rounded-lg shadow-sm bg-white">
+          <strong>${item.name}</strong> - ${item.description}<br>
+          Location: ${item.location}<br>
+          Reported on: ${formatDate(item.dateTime)}<br>
+          Claimed: ${item.claimed ? "✅ Yes (by " + item.claimedBy + ")" : "❌ No"}<br>
+          ${!item.claimed ? `
+            <button onclick="deleteItem('${doc.id}')" 
+              class="mt-2 bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md">🗑️ Delete</button>` : ''}
+        </div>
       `;
       itemsList.appendChild(li);
     });
@@ -100,12 +112,15 @@ function loadItems() {
 }
 
 // Delete unclaimed item only
-function deleteItem(itemId) {
+async function deleteItem(itemId) {
   if (confirm("Are you sure you want to permanently delete this item?")) {
-    db.collection('lostItems').doc(itemId).delete().then(() => {
+    try {
+      await db.collection('lostItems').doc(itemId).delete();
       alert("Item deleted successfully.");
       loadItems();
-    });
+    } catch (err) {
+      alert("Failed to delete item: " + err.message);
+    }
   }
 }
 

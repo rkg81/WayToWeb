@@ -41,7 +41,7 @@
     <p id="user-profile" class="text-center text-sm text-gray-600 mb-4"></p>
 
     <!-- Report Section -->
-    <section id="report-section" style="display: none;">
+    <section id="report-section" class="hidden">
       <h3 class="text-lg font-semibold mb-2">Report Lost Item</h3>
       <form id="reportForm" class="space-y-4">
         <input id="item-name" placeholder="Item Name" required class="w-full p-3 border border-gray-300 rounded-lg" />
@@ -64,7 +64,7 @@
     </section>
 
     <!-- Search Section -->
-    <section id="search-section" style="display: none;">
+    <section id="search-section" class="hidden">
       <h3 class="text-lg font-semibold mt-8 mb-2">Search Reported Items</h3>
       <input id="search-query" placeholder="Search by item name..." class="w-full p-3 border border-gray-300 rounded-lg mb-3" />
       <button onclick="searchItems()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-lg transition">

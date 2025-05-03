@@ -6,13 +6,17 @@ password: 123456789$%$#sdfDD
 2. email: bcs@email.latech.edu (user)
 password: RkdffRd$#%ladk
 
-3. email: qwe@latech.edu
+3. email: qwe@latech.edu (admin)
 password: $#$%lkdkDDREk
 
-4. rock@latech.edu
+4. rock@latech.edu (user)
 password: Khjk#$^kdkj8
 
+5. bull@email.latech.edu (user)
+password: lkj%34DDfklE&
 
+6. rkg007@email.latech.edu
+password: lsdjkDRkdD%$%^
 
 
 [User's Camera] ---> [PWA Frontend] ---> [YOLO Server API] ---> [Detection Result] ---> [Fill Form in PWA]

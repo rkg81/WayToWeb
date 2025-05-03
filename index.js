@@ -1,7 +1,8 @@
+const storage = firebase.storage();
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-// Handle authentication state
+// Auth check
 auth.onAuthStateChanged(user => {
   if (!user) {
     window.location.href = 'login.html';
@@ -16,7 +17,7 @@ auth.onAuthStateChanged(user => {
   }
 });
 
-// Show toast message
+// Toast
 function showToast(message, duration = 3000) {
   const toast = document.getElementById('toast');
   toast.textContent = message;
@@ -28,7 +29,7 @@ function showToast(message, duration = 3000) {
   }, duration);
 }
 
-// Logout function
+// Logout
 function logout() {
   auth.signOut().then(() => {
     showToast("Logged out successfully!");
@@ -38,7 +39,7 @@ function logout() {
   });
 }
 
-// Report item
+// Report Item
 function reportItem() {
   const name = document.getElementById('item-name').value.trim();
   const description = document.getElementById('item-description').value.trim();
@@ -53,21 +54,31 @@ function reportItem() {
 
   const dateTime = new Date().toISOString();
 
+  // ✅ New code: Use Firebase Storage instead of base64
   if (photoInput.files.length > 0) {
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      saveItemToFirestore(name, description, color, location, dateTime, e.target.result);
-    };
-    reader.readAsDataURL(photoInput.files[0]);
+    const file = photoInput.files[0];
+    const storageRef = storage.ref(`images/${Date.now()}_${file.name}`);
+
+    storageRef.put(file)
+      .then(snapshot => snapshot.ref.getDownloadURL())
+      .then(downloadURL => {
+        saveItemToFirestore(name, description, color, location, dateTime, downloadURL);
+      })
+      .catch(error => {
+        console.error("Upload failed:", error);
+        showToast("Image upload failed.");
+      });
+
   } else {
     saveItemToFirestore(name, description, color, location, dateTime, '');
   }
 }
 
-// Save item to Firestore
-function saveItemToFirestore(name, description, color, location, dateTime, photo) {
+
+function saveItemToFirestore(name, description, color, location, dateTime, photoUrl) {
   db.collection('lostItems').add({
-    name, description, color, location, dateTime, photo,
+    name, description, color, location, dateTime,
+    photo: photoUrl,
     claimed: false,
     claimedBy: null
   }).then(() => {
@@ -77,7 +88,8 @@ function saveItemToFirestore(name, description, color, location, dateTime, photo
   });
 }
 
-// Claim item
+
+// Claim Item
 function claimItem(itemId) {
   const user = auth.currentUser;
   if (!user) return;
@@ -107,32 +119,44 @@ function previewPhoto() {
   }
 }
 
-// Search items
+// Search Items
 function searchItems() {
   const query = document.getElementById('search-query').value.trim().toLowerCase();
   const resultsList = document.getElementById('search-results');
   resultsList.innerHTML = '';
 
+  if (!query) {
+    showToast('Please enter a search term');
+    return;
+  }
+
   db.collection('lostItems').get().then(snapshot => {
+    let found = false;
+
     snapshot.forEach(doc => {
       const item = doc.data();
-      if (item.name.toLowerCase().includes(query)) {
+      if (!item.claimed && item.name.toLowerCase().includes(query)) {
         const li = document.createElement('li');
         li.innerHTML = `
-          <strong>${item.name}</strong> - ${item.description} (${item.color}, ${item.location})
-          <br><img src="${item.photo}" style="width:150px; margin-top:5px;" />
-          <br><button onclick="claimItem('${doc.id}')">Claim</button>
+          <strong>${item.name}</strong> - ${item.description} (${item.color}, ${item.location})<br>
+          <img src="${item.photo}" style="width:150px; margin-top:5px;" /><br>
+          <button onclick="claimItem('${doc.id}')">Claim</button>
         `;
         resultsList.appendChild(li);
+        found = true;
       }
     });
-    if (!resultsList.hasChildNodes()) {
-      showToast("No matching items found");
+
+    if (!found) {
+      resultsList.innerHTML = '<li>No matching items found.</li>';
     }
+  }).catch(error => {
+    console.error('Search error:', error);
+    showToast("Search failed. Try again.");
   });
 }
 
-// ✅ Register service worker for PWA support
+// Register service worker
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/service-worker.js');
 }

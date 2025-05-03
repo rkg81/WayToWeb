@@ -8,11 +8,13 @@
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Firebase SDKs -->
+  <!-- ✅ Firebase SDKs (include storage!) -->
   <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-storage-compat.js"></script>
 
+  <!-- ✅ Firebase Config -->
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyAC45Q9vgk_GexkWQf_2pxOiTrlMIdxwE4",
@@ -37,7 +39,7 @@
       </button>
     </div>
 
-    <!-- User -->
+    <!-- User Info -->
     <p id="user-profile" class="text-center text-sm text-gray-600 mb-4"></p>
 
     <!-- Report Section -->
@@ -51,7 +53,7 @@
         <input type="file" id="item-photo" onchange="previewPhoto(this.files[0])" class="w-full p-2 border border-gray-300 rounded-lg" />
         <img id="photo-preview" style="display:none;" class="mt-2 w-32 h-auto rounded-md" />
 
-        <!-- Dual Buttons -->
+        <!-- Buttons -->
         <div class="flex gap-4">
           <button type="button" onclick="reportItem()" class="w-1/2 bg-yellow-500 hover:bg-yellow-600 text-white py-2 rounded-lg transition">
             Detect with YOLO
@@ -74,10 +76,10 @@
     </section>
   </div>
 
-  <!-- Scripts -->
+  <!-- ✅ Load JS after Firebase + DOM ready -->
   <script src="index.js"></script>
 
-  <!-- Toast -->
+  <!-- Toast Message -->
   <div id="toast" class="toast fixed bottom-5 left-1/2 -translate-x-1/2 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-md hidden"></div>
 </body>
 </html>

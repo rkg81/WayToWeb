@@ -55,8 +55,6 @@ async function reportItem() {
 
   try {
     const file = photoInput.files[0];
-
-    // Preview the photo
     previewPhoto(file);
 
     if (file.size > 3 * 1024 * 1024) {
@@ -122,7 +120,6 @@ function saveItemToFirestore(name, description, color, location, dateTime, photo
   });
 }
 
-// Claim Item
 function claimItem(itemId) {
   const user = auth.currentUser;
   if (!user) return;
@@ -190,7 +187,7 @@ if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/service-worker.js');
 }
 
-// Image compression helper
+// Image compression
 function compressImage(file, maxWidth = 640, maxHeight = 640, quality = 0.7) {
   return new Promise((resolve, reject) => {
     const img = new Image();
@@ -229,29 +226,4 @@ function compressImage(file, maxWidth = 640, maxHeight = 640, quality = 0.7) {
   });
 }
 
-// Optional YOLO Integration (Uncomment and configure IP)
-/*
-function sendImageToYOLOServer(file) {
-  const formData = new FormData();
-  formData.append('image', file);
 
-  fetch('http://<FRIEND-IP>:5000/detect', {
-    method: 'POST',
-    body: formData
-  })
-  .then(response => response.json())
-  .then(data => {
-    if (data.labels?.length) {
-      document.getElementById('item-name').value = data.labels[0];
-    }
-    if (data.colors?.length) {
-      document.getElementById('item-color').value = data.colors[0];
-    }
-    showToast("Object detected and form auto-filled!", 3000);
-  })
-  .catch(error => {
-    console.error('Detection failed:', error);
-    showToast("Detection failed. Please try again.", 3000);
-  });
-}
-*/

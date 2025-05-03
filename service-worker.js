@@ -57,11 +57,15 @@ self.addEventListener('fetch', event => {
     );
   } else {
     event.respondWith(
-      caches.match(event.request).then(response => {
-        return response || fetch(event.request)
-          // Optional fallback
-          // .catch(() => caches.match('/offline.html'))
-      })
+      (async () => {
+        if (event.request.url.includes('firebasestorage.googleapis.com')) {
+          return fetch(event.request); // Don't cache Firebase Storage
+        }
+    
+        const cached = await caches.match(event.request);
+        return cached || fetch(event.request);
+      })()
     );
+    
   }
 });
